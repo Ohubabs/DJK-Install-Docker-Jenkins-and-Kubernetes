@@ -1,0 +1,60 @@
+#Copy and Paste below script in the configure system section of Advanced setting during Launch EC2 instance setup
+
+#!/bin/bash
+sudo hostname docker
+sudo apt update -y 
+sudo apt install docker.io -y
+sudo usermod -aG docker ubuntu 
+sudo apt install wget -y
+sudo apt update -y
+sudo apt install openjdk-11-jdk -y
+wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt update
+sudo apt install jenkins -y
+sudo systemctl start jenkins
+sudo echo "jenkins ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/jenkins
+sudo usermod -aG docker jenkins
+sudo systemctl restart docker.service
+
+#After setting up jenkins on the browser with necessary plugins i.e. Docker, run the below commands and afterwards you'll be able to run docker commands in the pipeline.
+sudo su - jenkins
+sudo chown jenkins /var/run/docker.sock
+
+#When running pipeline job, login to docker from within the server i.e. "docker login -u "username"" so that you can easily execute "docker push 'reponame'" within the pipeline
+
+pipeline{
+    agent any
+    tools {
+        maven 'maven3.8.6'
+    }
+    stages{
+        stage('Clone Code'){
+            steps{
+                sh "echo cloning code"
+                sh "echo clone code complete"
+                git 'https://github.com/Ohubabs/tesla-app.git'
+            }
+        }
+        stage('Build Code'){
+            steps{
+                sh "echo Build War Package"
+                sh "mvn clean package"
+            }
+        }
+        stage('Quality Report'){
+            steps{
+                sh "echo Quality Report Loading"
+                sh "echo Quality Report Complete"
+                sh "mvn sonar:sonar"
+            }
+        }
+        stage('PreDeployment'){
+            steps{
+                sh "echo build image"
+                sh "docker build -t princebabs/wfapp:11 ."
+                sh "docker push princebabs/wfapp:11"
+            }
+        }
+    }
+}
