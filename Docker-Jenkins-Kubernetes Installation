@@ -1,0 +1,80 @@
+#Copy and Paste below script in the configure system section of Advanced setting during Launch EC2 instance setup
+
+#!/bin/bash
+sudo hostname docker
+sudo apt update -y 
+sudo apt install docker.io -y
+sudo usermod -aG docker ubuntu 
+sudo apt install wget -y
+sudo apt update -y
+sudo apt install openjdk-11-jdk -y
+wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt update
+sudo apt install jenkins -y
+sudo systemctl start jenkins
+sudo echo "jenkins ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/jenkins
+sudo usermod -aG docker jenkins
+sudo systemctl restart docker.service
+
+#After setting up jenkins on the browser with necessary plugins i.e. Docker, run the below commands and afterwards you'll be able to run docker commands in the pipeline.
+sudo su - jenkins
+sudo chown jenkins /var/run/docker.sock
+
+#Install AWS CLI so you can run AWS services from your server and as a requirement for KOPS
+sudo apt install awscli -y 
+#or
+sudo apt update -y
+sudo apt install unzip wget -y
+sudo curl https://s3.amazonaws.com/aws-cli/awscli-bundle.zip -o awscli-bundle.zip
+sudo apt install unzip python -y
+sudo unzip awscli-bundle.zip
+sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+
+#Install KOPS
+sudo apt update -y
+sudo wget https://github.com/kubernetes/kops/releases/download/v1.22.0/kops-linux-amd64
+sudo chmod +x kops-linux-amd64
+sudo mv kops-linux-amd64 /usr/local/bin/kops
+
+#Install Kubectl
+sudo curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+sudo chmod +x ./kubectl
+sudo mv ./kubectl /usr/local/bin/kubectl
+
+#Create IAM role with below access and attach to the to server by selecting the Server --> Actions --> Instance Settings --> Attach/Replace IAM Role 
+--> Select the role which You Created. --> Save.
+AmazonEC2FullAccess 
+AmazonS3FullAccess
+IAMFullAccess 
+AmazonVPCFullAccess
+
+#Create s3 bucket to act as etcd store for your secret keys, logs, pvc, pod definition files etc...
+aws s3 mb s3://bucketname #Use unique s3 bucket name. If you get bucket name exists error.
+aws s3 ls
+
+ex: s3://bucketname
+ 
+Expose environment variable:
+
+# Add env variables in bashrc
+vi .bashrc
+
+# Give Unique Name And S3 Bucket which you created.
+export NAME=class.k8s.local
+export KOPS_STATE_STORE=s3://bucketname
+
+source .bashrc #To check that it worked
+
+#Create ssh key before creating cluster. This will allow you to run the ssh command to access your Master/Worker Nodes in your cluster from your DJK server
+ssh-keygen
+
+#Create Cluster and store your ssh key as a secret within your etcd (configured s3 bucket). Note zone, master/node siz
+kops create cluster --zones us-east-2c --networking weave --master-size t2.medium --master-count 1 --node-size t2.medium --node-count=2 ${NAME}
+
+kops create secret --name ${NAME} sshpublickey admin -i ~/.ssh/id_rsa.pub
+
+kops update cluster ${NAME} --yes
+
+#Connect to Master/Worker Nodes from DJK server, run the below command:
+sh -i ~/.ssh/id_rsa ubuntu@ipAddress
