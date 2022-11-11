@@ -17,6 +17,8 @@ sudo echo "jenkins ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/jenkins
 sudo usermod -aG docker jenkins
 sudo systemctl restart docker.service
 
+#INSTALL AWS CLI, KUBECTL & KOPS FROM JENKINS SERVER NOT DEFAULT UBUNTU!!
+
 #Install AWS CLI so you can run AWS services from your server and as a requirement for KOPS
 
 sudo apt install awscli -y 
