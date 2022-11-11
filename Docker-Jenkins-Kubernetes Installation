@@ -82,4 +82,4 @@ sudo su - jenkins
 sudo chown jenkins /var/run/docker.sock
 
 #Connect to Master/Worker Nodes from DJK server, run the below command:
-sh -i ~/.ssh/id_rsa ubuntu@ipAddress
+sh -i ~/.ssh/id_rsa ubuntu@3.19.29.19
