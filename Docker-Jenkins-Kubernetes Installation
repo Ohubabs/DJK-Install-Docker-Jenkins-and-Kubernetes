@@ -75,9 +75,8 @@ sudo echo "jenkins:admin" | chpasswd
 sudo sed -i "/^[^#]*PasswordAuthentication[[:space:]]no/c\PasswordAuthentication yes" /etc/ssh/sshd_config
 sudo service sshd restart
 
-#While your cluster is being created which can take up to 10 mins, set up jenkins on the browser with necessary plugins e.g Docker, Maven, Artifactory, 
-Deploy to container, Deploy Weblogic, then configure Docker and Maven in Global tool configuration and finally, run the below commands 
-so you'll be able to run docker commands in the pipeline.
+#While your cluster is being created which can take up to 10 mins, set up jenkins on the browser and then run the below commands so you'll be able to run 
+docker commands in the pipeline.
 
 sudo su - jenkins
 sudo chown jenkins /var/run/docker.sock
