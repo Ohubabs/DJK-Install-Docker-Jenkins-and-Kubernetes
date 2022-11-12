@@ -1,0 +1,32 @@
+#Pipeline Up till Removing Images
+node{
+     def mavenHome = tool name: 'maven3.8.6'
+    stage('SCM Checkout'){
+        git credentialsId: 'Github-credentials', url: 'https://github.com/Ohubabs/spring-boot-docker.git'
+    }
+        
+    stage('MavenBuild'){
+      sh "${mavenHome}/bin/mvn clean package"
+    } 
+    stage('CodeQuality'){
+      //sh "${mavenHome}/bin/mvn sonar:sonar"
+    }
+    stage('UploadArtifact'){
+      //sh "${mavenHome}/bin/mvn deploy"
+    }
+    stage('UploadImage'){
+      sh "docker build -t mylandmarktech/spring-boot-mongo ."
+    }
+    stage('PushImagesToDockerHub'){
+        withCredentials([string(credentialsId: 'DockerHubCredentials2', variable: 'DockerHubCredentials2')]) {
+    // some block
+      sh 'docker login -u princebabs -p ${DockerHubCredentials2}'    
+}
+
+    sh "docker tag mylandmarktech/spring-boot-mongo princebabs/wfapp:17"
+    sh "docker push princebabs/wfapp:17"
+    }
+    stage('DeployToKubernetes'){
+        sh "kubectl apply -f springapp.yml"
+    }
+}
