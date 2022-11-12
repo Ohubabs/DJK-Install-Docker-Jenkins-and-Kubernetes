@@ -83,3 +83,5 @@ sh -i ~/.ssh/id_rsa ubuntu@18.218.229.195
 
 #Delete Cluster
 kops delete cluster --name=${NAME} --state=${KOPS_STATE_STORE} --yes
+
+#kubectl config set-context --current --namespace=dev
