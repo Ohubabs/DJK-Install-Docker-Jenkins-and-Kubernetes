@@ -79,7 +79,7 @@ sudo su - jenkins
 sudo chown jenkins /var/run/docker.sock
 
 #Connect to your Master from the Jenkins user in your DJK server, run the below command:
-sh -i ~/.ssh/id_rsa ubuntu@3.16.147.94
+sh -i ~/.ssh/id_rsa ubuntu@18.218.229.195
 
 #Delete Cluster
 kops delete cluster --name=${NAME} --state=${KOPS_STATE_STORE} --yes
