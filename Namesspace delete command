@@ -1,0 +1,3 @@
+kubectl get namespace "cattle-sytem" -o json \
+  | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/" \
+  | kubectl replace --raw /api/v1/namespaces/cattle-system/finalize -f -
