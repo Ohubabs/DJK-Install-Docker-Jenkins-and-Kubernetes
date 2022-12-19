@@ -10,14 +10,14 @@ pip3 install --upgrade requests --user
 
 #If installing on ubuntu use sudo apt -y install python3-pip
 
-#terraform install
+pip3 install ansible --user
+#verify with ansible --version
+sudo mkdir /etc/ansible
+ls /etc/ansible
+sudo chown -R ansible.ansible /etc/ansible
+vi /etc/ansible/ansible.cfg
+#find config file at https://raw.githubusercontent.com/ansible/ansible/deve1/examples/ansible.cfg
+vi /etc/ansible/hosts
+#find config file at https://raw.githubusercontent.com/ansible/ansible/deve1/examples/hosts
 
-#awscli installation
-sudo apt update -y
-sudo apt install awscli -y
- 
-#terraform
-sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
-curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-sudo apt-get update && sudo apt-get install terraform
+
