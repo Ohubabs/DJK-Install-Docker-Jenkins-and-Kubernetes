@@ -1,0 +1,9 @@
+#Ansible installation in ubuntu
+sudo hostnamectl set-hostname ansible
+sudo adduser ansible
+echo "ansible  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/ansible
+sudo su - ansible
+sudo yum -y install python3-pip
+sudo apt -y install python3-pip
+pip3 install boto3 botocore --user
+pip3 install --upgrade requests --user
