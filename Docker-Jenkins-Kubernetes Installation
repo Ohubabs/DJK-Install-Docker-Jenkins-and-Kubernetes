@@ -7,6 +7,7 @@ sudo apt install docker.io -y
 sudo usermod -aG docker ubuntu 
 sudo apt install wget -y
 sudo apt update -y
+#install jenkins
 sudo apt install openjdk-11-jdk -y
 wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
 sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
