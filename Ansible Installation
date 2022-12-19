@@ -1,9 +1,23 @@
-#Ansible installation in ubuntu
+#Ansible installation in redhat
+
 sudo hostnamectl set-hostname ansible
 sudo adduser ansible
 echo "ansible  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/ansible
 sudo su - ansible
 sudo yum -y install python3-pip
-sudo apt -y install python3-pip
 pip3 install boto3 botocore --user
 pip3 install --upgrade requests --user
+
+#If installing on ubuntu use sudo apt -y install python3-pip
+
+#terraform install
+
+#awscli installation
+sudo apt update -y
+sudo apt install awscli -y
+ 
+#terraform
+sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+sudo apt-get update && sudo apt-get install terraform
