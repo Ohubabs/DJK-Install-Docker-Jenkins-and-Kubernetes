@@ -1,0 +1,25 @@
+pipeline {
+    agent{
+    label 'terraformnode'
+    }
+    stages{
+        stage('1ValidateCode')
+           steps{
+               sh "terraform init"
+               sh "terraform validate"
+           }
+        }
+        stafe('2createInfra'){
+            steps{
+                sh "echo ready to provision vpc, sonar, tomcat, k8s, nexus"
+                sh "terraform plan"
+                sh "terraform apply --auto-approve"
+            }
+        }
+        stage('3wait2configure'){
+            steps{
+                sh "sleep 120"
+                sh "echo ready for configuration"
+            }
+        }
+    }
