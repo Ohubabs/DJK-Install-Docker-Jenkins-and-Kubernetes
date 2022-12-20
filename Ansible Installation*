@@ -1,0 +1,21 @@
+#Ansible installation in redhat
+sudo hostnamectl set-hostname ansible
+sudo adduser ansible
+echo "ansible  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/ansible
+sudo su - ansible
+sudo yum -y install python3-pip
+pip3 install boto3 botocore --user
+pip3 install --upgrade requests --user
+
+#If installing on ubuntu use sudo apt -y install python3-pip
+
+#terraform install
+pip3 install ansible --user
+#verify with ansible --version
+sudo mkdir /etc/ansible
+ls /etc/ansible
+sudo chown -R ansible.ansible /etc/ansible
+vi /etc/ansible/ansible.cfg
+#find config file at https://raw.githubusercontent.com/ansible/ansible/deve1/examples/ansible.cfg
+vi /etc/ansible/hosts
+#find config file at https://raw.githubusercontent.com/ansible/ansible/deve1/examples/hosts
