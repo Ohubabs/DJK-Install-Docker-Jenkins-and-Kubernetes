@@ -1,10 +1,38 @@
-#Install AWS CLI
+#1 - Install AWS CLI
 
 sudo apt install awscli -y 
 sudo apt update -y
 
-#Install Kubectl
+Alternate method reference: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
+#2 - Install Kubectl
 
 sudo curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 sudo chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
+
+Alternative method reference: https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html
+
+#3 - Set up IAM user and access key details via the management console so that you can securely access your account via the aws cli.
+
+Step-01-03: Configure AWS Command Line using Security Credentials
+Go to AWS Management Console --> Services --> IAM
+Select the IAM User: kalyan
+Important Note: Use only IAM user to generate Security Credentials. Never ever use Root User. (Highly not recommended)
+Click on Security credentials tab
+Click on Create access key
+Copy Access ID and Secret access key
+Go to command line and provide the required details
+
+#Example
+aws configure
+AWS Access Key ID [None]: ABCDEFGHIAZBERTUCNGG  (Replace your creds when prompted)
+AWS Secret Access Key [None]: uMe7fumK1IdDB094q2sGFhM5Bqt3HQRw3IHZzBDTm  (Replace your creds when prompted)
+Default region name [None]: us-east-1
+Default output format [None]: json
+
+#4 - Install EKS CLI
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl version
+reference: https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html#installing-eksctl
