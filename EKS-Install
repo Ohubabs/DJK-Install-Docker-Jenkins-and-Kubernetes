@@ -1,6 +1,9 @@
-#1 - Add user
+#1 - Add user and change hostname
+
 sudo adduser eks4
 sudo echo "eks4 ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/eks4
+sudo su - eks4
+sudo hostnamectl set-hostname eks
 
 #2 - Set up IAM user and access key details via the management console so that you can securely access your account via the aws cli.
 
