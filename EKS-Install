@@ -15,7 +15,7 @@ Click on Security credentials tab
 Click on Create access key
 Copy Access ID and Secret access key
 
-Part B: Create and Assign EKS IAM roles to server such as:
+Part B: Create an EKS IAM role with the following permissions and assign the EKS IAM roles to the server that will create the cluster:
 AmazonEKSClusterPolicy
 AmazonEKSFargatePodExecutionRolePolicy
 AmazonEKS_CNI_Policy
@@ -24,10 +24,17 @@ AmazonEKSWorkerNodePolicy
 AmazonEKSVPCResourceController
 
 
-Part C - Install AWS CLI
+Part C - Install AWS CLI 
 
 sudo apt update -y
-sudo apt install awscli -y
+sudo apt install unzip
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip 
+sudo ./aws/install
+aws --version
+
+#AWS CLIv2 is the minimum needed for kubectl v1.24 and eksctl v0.125.0 to work together. (As of 1/25/2023)
+#AWS CLI download ref: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
 Part D - Provide the required AWS credentials to login to account by inputting the following commands and values (based on created access keys and region for your user) in order:
 
@@ -37,18 +44,24 @@ AWS Secret Access Key [None]: uMe7fumK1IdDB094q2sGFhM5Bqt3HQRw3IHZzBDTm  (Replac
 Default region name [None]: us-east-1
 Default output format [None]: json
 
-Alternate method reference: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
-
 #3 - Install Kubectl
 
-sudo curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+sudo curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.24.9/2023-01-11/bin/linux/amd64/kubectl
 sudo chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
+kubectl version --short
 
-Alternative method reference: https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html
+#Kubectl install AWS guide: https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html
+#AWS EKS-Kubernetes Versioning Calendar: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#available-versions
 
 #4 - Install EKS CLI
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.125.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
 sudo mv /tmp/eksctl /usr/local/bin
 eksctl version
-reference: https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html#installing-eksctl
+
+#NOTES
+#eksctl v0.126.0, the latest version as of 1/25/2023, only works with kubernetes v1.25,v1.26 and v1.27. Kubernetes v1.25 releases on AWS EKS in March 2023. 
+So, I used eksctl v.0125.0 with kubernetes v1.24.
+#AWS eksctl install guide: https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html#installing-eksctl
+#eksctl versioning Github repo: https://github.com/weaveworks/eksctl/releases/
+#AWS EKS-Kubernetes Versioning Calendar: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#available-versions
