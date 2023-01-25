@@ -1,7 +1,11 @@
+#Add user
+sudo adduser eks4
+sudo echo "eks4 ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/eks4
+
 #1 - Install AWS CLI
 
-sudo apt install awscli -y 
 sudo apt update -y
+sudo apt install awscli -y 
 
 Alternate method reference: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
