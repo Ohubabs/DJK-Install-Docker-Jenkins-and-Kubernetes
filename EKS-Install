@@ -1,16 +1,8 @@
-#Add user
+#1 - Add user
 sudo adduser eks4
 sudo echo "eks4 ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/eks4
 
-#Create and Assign EKS IAM roles to server such as:
-AmazonEKSClusterPolicy
-AmazonEKSFargatePodExecutionRolePolicy
-AmazonEKS_CNI_Policy
-AmazonEKSServicePolicy
-AmazonEKSWorkerNodePolicy
-AmazonEKSVPCResourceController
-
-#3 - Set up IAM user and access key details via the management console so that you can securely access your account via the aws cli.
+#2 - Set up IAM user and access key details via the management console so that you can securely access your account via the aws cli.
 
 Part A: Configure AWS Command Line using Security Credentials
 Go to AWS Management Console --> Services --> IAM
@@ -44,15 +36,13 @@ Default output format [None]: json
 
 Alternate method reference: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
-#2 - Install Kubectl
+#3 - Install Kubectl
 
 sudo curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 sudo chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
 
 Alternative method reference: https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html
-
-
 
 #4 - Install EKS CLI
 curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
