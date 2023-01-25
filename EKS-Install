@@ -10,10 +10,37 @@ AmazonEKSServicePolicy
 AmazonEKSWorkerNodePolicy
 AmazonEKSVPCResourceController
 
-#1 - Install AWS CLI
+#3 - Set up IAM user and access key details via the management console so that you can securely access your account via the aws cli.
+
+Part A: Configure AWS Command Line using Security Credentials
+Go to AWS Management Console --> Services --> IAM
+Select the IAM User: kalyan
+Important Note: Use only IAM user to generate Security Credentials. Never ever use Root User. (Highly not recommended)
+Click on Security credentials tab
+Click on Create access key
+Copy Access ID and Secret access key
+
+Part B: Create and Assign EKS IAM roles to server such as:
+AmazonEKSClusterPolicy
+AmazonEKSFargatePodExecutionRolePolicy
+AmazonEKS_CNI_Policy
+AmazonEKSServicePolicy
+AmazonEKSWorkerNodePolicy
+AmazonEKSVPCResourceController
+
+
+Part C - Install AWS CLI
 
 sudo apt update -y
-sudo apt install awscli -y 
+sudo apt install awscli -y
+
+Part D - Provide the required AWS credentials to login to account by inputting the following commands and values (based on created access keys and region for your user) in order:
+
+aws configure
+AWS Access Key ID [None]: ABCDEFGHIAZBERTUCNGG  (Replace your creds when prompted)
+AWS Secret Access Key [None]: uMe7fumK1IdDB094q2sGFhM5Bqt3HQRw3IHZzBDTm  (Replace your creds when prompted)
+Default region name [None]: us-east-1
+Default output format [None]: json
 
 Alternate method reference: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
@@ -25,23 +52,7 @@ sudo mv ./kubectl /usr/local/bin/kubectl
 
 Alternative method reference: https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html
 
-#3 - Set up IAM user and access key details via the management console so that you can securely access your account via the aws cli.
 
-Step-01-03: Configure AWS Command Line using Security Credentials
-Go to AWS Management Console --> Services --> IAM
-Select the IAM User: kalyan
-Important Note: Use only IAM user to generate Security Credentials. Never ever use Root User. (Highly not recommended)
-Click on Security credentials tab
-Click on Create access key
-Copy Access ID and Secret access key
-Go to command line and provide the required details
-
-#Example
-aws configure
-AWS Access Key ID [None]: ABCDEFGHIAZBERTUCNGG  (Replace your creds when prompted)
-AWS Secret Access Key [None]: uMe7fumK1IdDB094q2sGFhM5Bqt3HQRw3IHZzBDTm  (Replace your creds when prompted)
-Default region name [None]: us-east-1
-Default output format [None]: json
 
 #4 - Install EKS CLI
 curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
