@@ -66,3 +66,4 @@ So, I used eksctl v.0125.0 with kubernetes v1.24.
 #eksctl versioning Github repo: https://github.com/weaveworks/eksctl/releases/
 #AWS EKS-Kubernetes Versioning Calendar: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#available-versions
 #List of Ubuntu ami per AWS region for EKS to use for creating nodegroups on ubuntu server: https://cloud-images.ubuntu.com/aws-eks/
+#How to create and manage clusters with AWS eksctl using yaml files: https://eksctl.io/usage/creating-and-managing-clusters/
