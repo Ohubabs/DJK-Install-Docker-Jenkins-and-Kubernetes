@@ -17,6 +17,8 @@ sudo echo "jenkins ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/jenkins
 sudo usermod -aG docker jenkins
 sudo systemctl restart docker.service
 
+#ref for jenkins-docker slave setup: https://devopscube.com/docker-containers-as-build-slaves-jenkins/
+
 #After setting up jenkins on the browser with necessary plugins i.e. Docker, run the below commands and afterwards you'll be able to run docker commands in the pipeline.
 sudo su - jenkins
 sudo chown jenkins /var/run/docker.sock
