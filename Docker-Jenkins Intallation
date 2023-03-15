@@ -15,6 +15,8 @@ sudo apt install jenkins -y
 sudo systemctl start jenkins
 sudo echo "jenkins ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/jenkins
 sudo usermod -aG docker jenkins
+sudo su - jenkins
+sudo chown jenkins /var/run/docker.sock
 sudo systemctl restart docker.service
 
 After installation
@@ -25,6 +27,11 @@ After installation
 can access the docker engine to run commands without needing sudo (i.e. because the file is no longer owner by the root user and group).
 
 #ref for jenkins-docker slave setup: https://devopscube.com/docker-containers-as-build-slaves-jenkins/
+#note for Jenkins-Docker & Jenkins-K8s integration, use Nodes/Agents instead of Cloud configuration. For the root directory, use the path for the user that will hold
+your cluster for example, if you have a user on your server named "eks" then the root directory in setup will be "/home/eks". Then setup a password for this user that can
+be referenced for connecting via SSH
+#Important plugins for Master-Slave integration= SSH, SSH Agent and Publish over SSH
+#Important Docker and Kubernetes plug in= Docker, Docker Pipeline, Kubernetes, Kubernetes CLI (For kubeconfig file), Kubernetes Pipeline
 
 #After setting up jenkins on the browser with necessary plugins i.e. Docker, run the below commands and afterwards you'll be able to run docker commands in the pipeline.
 sudo su - jenkins
